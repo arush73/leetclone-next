@@ -25,11 +25,10 @@ import { useProblemStore } from "@/app/store/useProblemStore";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { LoaderFour } from "@/components/ui/loader";
+import { BackgroundGradient } from "@/components/ui/background-gradient";
 
 const Page = () => {
-  const params = useParams();
-  const router = useRouter();
-  const problemId = params.id;
+  
   const {
     problem,
     getProblemDetails,
@@ -38,6 +37,11 @@ const Page = () => {
     runCode,
     submitCode,
   } = useProblemStore();
+
+  const params = useParams();
+  const problemId = params.id;
+  
+  const router = useRouter();
 
   // useEffect(() => {
   //   getProblemDetails(problemId);
@@ -96,9 +100,14 @@ const Page = () => {
         </div>
         <div className="text-blue-500 font-bold">logo and stuff</div>
       </div>
-      <div className="flex items-center justify-center h-screen w-full">
-        <ResizablePanelGroup direction="horizontal" className="">
-          <ResizablePanel defaultSize={40}>
+      <Separator className="bg-gray-500" />
+      {/* <BackgroundGradient> */}
+      <div className="flex items-center justify-center h-screen w-full pt-1.5 ">
+        <ResizablePanelGroup
+          direction="horizontal"
+          className="bg-[#1e1e1e] "
+        >
+          <ResizablePanel defaultSize={40} className="">
             <Tabs defaultValue="account" className="">
               <TabsList className="flex space-x-8 w-full">
                 <TabsTrigger value="description">description</TabsTrigger>
@@ -135,13 +144,13 @@ const Page = () => {
               <TabsContent value="solutions">solutions</TabsContent>
             </Tabs>
           </ResizablePanel>
-          <Separator orientation="vertical" className="bg-gray-700" />
+          <Separator orientation="vertical" className="" />
           <ResizableHandle />
           <ResizablePanel defaultSize={60}>
-            <ResizablePanelGroup direction="vertical">
+            <ResizablePanelGroup direction="vertical" className="">
               <ResizablePanel defaultSize={60} className="">
                 <div className="w-full h-full">
-                  <div>
+                  <div className="flex items-center ml-5">
                     <Select
                       defaultValue="java"
                       onValueChange={(value) => selectLanguage(value)}
@@ -159,23 +168,26 @@ const Page = () => {
                       </SelectContent>
                     </Select>
                   </div>
+                  <Separator />
                   <div className="h-full w-full">
                     <Editor
                       height="100%"
-                      // language={selectedLanguage.toLowerCase()}
-                      language="javascript"
+                      language={language.toLowerCase()}
                       theme="vs-dark"
-                      // value={code}
+                      value={code}
                       onChange={(value) => setCode(value || "")}
                       options={{
-                        minimap: { enabled: true },
+                        minimap: { enabled: false },
                         fontSize: 20,
                         lineNumbers: "on",
                         roundedSelection: false,
                         scrollBeyondLastLine: false,
                         readOnly: false,
                         automaticLayout: true,
+                        cursorStyle: "line",
+                        cursorBlinking: "expand",
                       }}
+                      defaultLanguage="java"
                     />
                   </div>
                 </div>
@@ -189,6 +201,7 @@ const Page = () => {
           </ResizablePanel>
         </ResizablePanelGroup>
       </div>
+      {/* </BackgroundGradient> */}
     </div>
   );
 };
