@@ -8,13 +8,13 @@ export const useAuthStore = create((set) => ({
   isLoggingIn: false,
   isCheckingAuth: false,
   isuserChecked: false,
-  isSSO:false,
+  isSSO: false,
 
   checkUser: async () => {
     set({ isCheckingAuth: true });
     try {
-      const response = await axiosInstance.get("/auth/check-user");
-      console.log("Checking auth: ", await response.data);
+      const response = await axiosInstance.get("/auth/current-user");
+      console.log("Checking auth: ", response.data);
 
       set({ user: response.data });
     } catch (error) {
@@ -48,7 +48,7 @@ export const useAuthStore = create((set) => ({
     set({ isLoggingIn: true });
 
     try {
-      const response = await axiosInstance.post("/api/v1/login", data);
+      const response = await axiosInstance.post("/auth/login", data);
 
       console.log("user loggedIn successfully: ", response.data);
 
@@ -76,22 +76,22 @@ export const useAuthStore = create((set) => ({
 
   SSOHandler: async (name) => {
     try {
-      set({ isSSO: true })
-      
-      let response 
+      set({ isSSO: true });
 
-      if(name === "google")
-        response = await axiosInstance.post("/auth/google")
+      let response;
+
+      if (name === "google")
+        response = await axiosInstance.post("/auth/google");
 
       if (name === "github")
-        response = await axiosInstance.post("/auth/github")
+        response = await axiosInstance.post("/auth/github");
 
-      set({user: response.data})
+      set({ user: response.data });
     } catch (error) {
-        console.log("failed to login through SSO: ", error.message)
-        toast(`${name} not working 🥲`);
+      console.log("failed to login through SSO: ", error.message);
+      toast(`${name} not working 🥲`);
     } finally {
-      set({isSSO:false})
+      set({ isSSO: false });
     }
-  }
+  },
 }));

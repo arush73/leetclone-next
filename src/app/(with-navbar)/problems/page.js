@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import React from "react";
 import {
   Table,
@@ -10,7 +10,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import Navbar from "./Navbar";
+import Navbar from "@/app/components/Navbar";
 
 const invoices = [
   {
@@ -60,9 +60,8 @@ const invoices = [
 const page = () => {
   return (
     <div className="flex flex-col items-center justify-start ">
-        <Navbar />
-      <div className="flex items-center justify-center">
-      </div>
+      {/* <Navbar /> */}
+      <div className="flex items-center justify-center"></div>
       <div className="flex item-center justify-center">
         <Table>
           <TableCaption>A list of your recent invoices.</TableCaption>

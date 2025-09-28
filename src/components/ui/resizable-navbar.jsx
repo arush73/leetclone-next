@@ -193,13 +193,15 @@ export const NavbarLogo = () => {
   return (
     <a
       href="#"
-      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black">
+      className="relative z-20 mr-4 flex items-center space-x-2 px-2 py-1 text-sm font-normal text-black"
+    >
       <img
-        src="https://assets.aceternity.com/logo-dark.png"
+        src="https://leetcode.com/_next/static/images/logo-dark-c96c407d175e36c81e236fcfdd682a0b.png"
         alt="logo"
         width={30}
-        height={30} />
-      <span className="font-medium text-black dark:text-white">Startup</span>
+        height={30}
+      />
+      <span className="font-medium text-black dark:text-white">maa chudao sbb</span>
     </a>
   );
 };

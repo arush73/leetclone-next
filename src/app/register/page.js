@@ -33,11 +33,13 @@ export default function Register() {
   const { registerUser, isRegistering, user, checkUser, SSOHandler, isSSO } =
     useAuthStore();
 
-  // checking if user is already registered or not
   useEffect(() => {
     checkUser();
+  }, []);
+
+  useEffect(() => {
     if (user) router.push("/");
-  }, [user, checkUser, router]);
+  }, [user, router]);
 
   const handleSSO = async (name) => {
     await SSOHandler(name);
@@ -111,7 +113,7 @@ export default function Register() {
               type="submit"
               disabled={isRegistering}
             >
-              {!isRegistering ? "Register" : <LoaderFour />}
+              {!isRegistering ? "Register" : <LoaderFour text="registering" />}
               <BottomGradient />
             </button>
 

@@ -7,7 +7,7 @@ import { z } from "zod";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useAuthStore } from "../store/useAuthStore";
-import { useEffect, useState } from "react";
+import { use, useEffect, useState } from "react";
 import { Eye, EyeOff } from "lucide-react";
 import { IconBrandGithub, IconBrandGoogle } from "@tabler/icons-react";
 import { cn } from "@/lib/utils";
@@ -35,9 +35,11 @@ export default function Register() {
   // checking if user is already registered or not
   useEffect(() => {
     checkUser();
-    if (user) router.push("/");
-  }, [user, checkUser, router]);
+  }, []);
 
+  useEffect(() => {
+    if (user) router.push("/");
+  }, [user, router]);
   const handleSSO = async (name) => {
     await SSOHandler(name);
   };
