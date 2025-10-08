@@ -201,7 +201,7 @@ export const NavbarLogo = () => {
         width={30}
         height={30}
       />
-      <span className="font-medium text-black dark:text-white">maa chudao sbb</span>
+      <span className="font-medium text-black dark:text-white">mine logo later</span>
     </a>
   );
 };

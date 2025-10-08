@@ -7,8 +7,7 @@ import {
   ResizablePanelGroup,
 } from "@/components/ui/resizable";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import Editor from "@monaco-editor/react";
-import ProblemHeader from "./problemHeader";
+import Editor, { useMonaco } from "@monaco-editor/react";
 import { Separator } from "@/components/ui/separator";
 import { Button } from "@/components/ui/button";
 import { SparklesCore } from "@/components/ui/sparkles";
@@ -21,14 +20,33 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuGroup,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuPortal,
+  DropdownMenuSeparator,
+  DropdownMenuShortcut,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 import { useProblemStore } from "@/app/store/useProblemStore";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import { LoaderFour } from "@/components/ui/loader";
 import { BackgroundGradient } from "@/components/ui/background-gradient";
 import Description from "./Description";
+import { ScrollArea } from "@/components/ui/scroll-area";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+// import chaiTheme from "./chai-theme.js";
+import Link from "next/link";
 
 const Page = () => {
+  const monaco = useMonaco();
   const problemData = {
     title: "Two Sum",
     statement:
@@ -51,6 +69,14 @@ const Page = () => {
       },
     ],
   };
+
+  // useEffect(() => {
+  //   console.log(chaiTheme)
+  //   if (monaco) {
+  //     monaco.editor.defineTheme("dark-chai-theme", chaiTheme)
+  //   }
+  // },[monaco])
+
   const {
     problem,
     getProblemDetails,
@@ -78,12 +104,9 @@ const Page = () => {
   const handleRun = async () => {
     runCode("le randi ke");
   };
-  const selectLanguage = (language) => {
-    setLanguage(language);
-    console.log(language);
-  };
+
   return (
-    <div className="flex flex-col  h-fit w-fit origin-top-left ">
+    <div className="flex flex-col  h-fit w-fit overflow-hidden">
       {/* upar waala  */}
       <div className="flex items-center justify-between   pt-3 pb-4 ">
         {/* logo waala */}
@@ -124,7 +147,42 @@ const Page = () => {
           </Button>
         </div>
         {/* right side waala */}
-        <div className="text-blue-500 font-bold mr-4">logo and stuff</div>
+        <div className="text-blue-500 font-bold mr-4">
+          <DropdownMenu>
+            <DropdownMenuTrigger asChild>
+              <Avatar className="mr-4">
+                <AvatarImage src="/description.svg" />
+                <AvatarFallback>CN</AvatarFallback>
+              </Avatar>
+            </DropdownMenuTrigger>
+            <DropdownMenuContent className="w-56" align="start">
+              <DropdownMenuLabel>My Account</DropdownMenuLabel>
+              <DropdownMenuGroup>
+                <Link href="/profile">
+                  <DropdownMenuItem>Profile</DropdownMenuItem>
+                </Link>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              <DropdownMenuGroup>
+                <DropdownMenuSub>
+                  <DropdownMenuSubTrigger>Invite users</DropdownMenuSubTrigger>
+                  <DropdownMenuPortal>
+                    <DropdownMenuSubContent>
+                      <DropdownMenuItem>Email</DropdownMenuItem>
+                      <DropdownMenuItem>Message</DropdownMenuItem>
+                    </DropdownMenuSubContent>
+                  </DropdownMenuPortal>
+                </DropdownMenuSub>
+              </DropdownMenuGroup>
+              <DropdownMenuSeparator />
+              {/* <DropdownMenuItem>GitHub</DropdownMenuItem> */}
+              <DropdownMenuItem>Support</DropdownMenuItem>
+              {/* <DropdownMenuItem disabled>API</DropdownMenuItem> */}
+              <DropdownMenuSeparator />
+              {/* <DropdownMenuItem onClick={handleLogout}>Log out</DropdownMenuItem> */}
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
       </div>
       {/* neeche resizable waala  */}
       {/* temp fix giving this div padding from bottom and right to make it fuit on screen */}
@@ -141,8 +199,8 @@ const Page = () => {
             defaultSize={40}
             className="border-2  rounded-3xl h-full w-full  bg-[#1e1e1e]"
           >
-            <Tabs defaultValue="description" className="">
-              <TabsList className="flex space-x-8 w-full">
+            <Tabs defaultValue="description" className="mt-2">
+              <TabsList className="flex space-x-8 w-full pl-1">
                 <TabsTrigger value="description">
                   <Image
                     src={"/description.svg"}
@@ -156,11 +214,24 @@ const Page = () => {
                   <Image src={"/editorial.svg"} alt="" height={15} width={15} />
                   editorial
                 </TabsTrigger>
-                <TabsTrigger value="submission">submission</TabsTrigger>
-                <TabsTrigger value="solutions">solutions</TabsTrigger>
+                <TabsTrigger value="submission">
+                  <Image
+                    src={"/submission.svg"}
+                    alt=""
+                    height={15}
+                    width={15}
+                  />
+                  submissions
+                </TabsTrigger>
+                <TabsTrigger value="solutions">
+                  <Image src={"/solution.svg"} alt="" height={15} width={18} />
+                  solutions
+                </TabsTrigger>
               </TabsList>
               <TabsContent value="description">
-                <Description {...problemData} />
+                <ScrollArea className=" h-170 rounded-md border p-2">
+                  <Description {...problemData} />
+                </ScrollArea>
               </TabsContent>
               <TabsContent value="editorial" className="bg-black">
                 <div className="flex flex-col items-center justify-center h-screen">
@@ -204,55 +275,51 @@ const Page = () => {
               direction="vertical"
               className="border-2 rounded-3xl space-y-1.5"
             >
+              {/* code editor waala*/}
               <ResizablePanel
                 defaultSize={60}
                 className="border-2 rounded-3xl bg-[#1e1e1e]"
               >
-                {/* <div className="w-full h-full">
-                    <div className="flex items-center ml-5">
-                      <Select
-                        defaultValue="java"
-                        onValueChange={(value) => selectLanguage(value)}
-                      >
-                        <SelectTrigger className="w-[180px]">
-                          <SelectValue placeholder="Select Language" />
-                        </SelectTrigger>
-                        <SelectContent>
-                          <SelectGroup>
-                            <SelectLabel>Language</SelectLabel>
-                            <SelectItem value="javascript">
-                              Javascript
-                            </SelectItem>
-                            <SelectItem value="java">Java</SelectItem>
-                            <SelectItem value="python">Python</SelectItem>
-                          </SelectGroup>
-                        </SelectContent>
-                      </Select>
-                    </div>
-                    <Separator />
-                    <div className="h-full w-full">
-                      <Editor
-                        className="border-2 rounded-2xl"
-                        height="100%"
-                        language={language.toLowerCase()}
-                        theme="vs-dark"
-                        value={code}
-                        onChange={(value) => setCode(value || "")}
-                        options={{
-                          minimap: { enabled: false },
-                          fontSize: 20,
-                          lineNumbers: "on",
-                          roundedSelection: false,
-                          scrollBeyondLastLine: false,
-                          readOnly: false,
-                          automaticLayout: true,
-                          cursorStyle: "line",
-                          cursorBlinking: "expand",
-                        }}
-                        defaultLanguage="java"
-                      />
-                    </div>
-                  </div> */}
+                <Select
+                  defaultValue="java"
+                  onValueChange={(value) => setLanguage(value)}
+                >
+                  <SelectTrigger className="ml-3 mt-1">
+                    <SelectValue placeholder="Select Language" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectGroup>
+                      <SelectLabel>Language</SelectLabel>
+                      <SelectItem value="javascript">Javascript</SelectItem>
+                      <SelectItem value="java">Java</SelectItem>
+                      <SelectItem value="python">Python</SelectItem>
+                    </SelectGroup>
+                  </SelectContent>
+                </Select>
+                <Separator className="bg-gray-500" />
+
+                <Editor
+                  className=" h-full"
+                  height="100%"
+                  language={language.toLowerCase()}
+                  theme="vs-dark"
+                  value={code}
+                  onChange={(value) => setCode(value || "")}
+                  options={{
+                    minimap: { enabled: false },
+                    fontSize: 20,
+                    lineNumbers: "on",
+                    roundedSelection: false,
+                    scrollBeyondLastLine: false,
+                    readOnly: false,
+                    automaticLayout: true,
+                    cursorStyle: "line",
+                    cursorBlinking: "expand",
+                    cursorSmoothCaretAnimation: true,
+                    contextmenu: false,
+                  }}
+                  defaultLanguage="java"
+                />
               </ResizablePanel>
               <ResizableHandle className="bg-transparent" />
               {/* <Separator className="bg-gray-600" /> */}
@@ -263,19 +330,37 @@ const Page = () => {
                 <Tabs defaultValue="testCase" className="ml-2 mt-2 ">
                   <TabsList className="space-x-4 ">
                     <TabsTrigger value="testCase">
-                    
-                      <Image src={"/testCheckBox.svg"} alt="" height={10} width={15}/>
+                      <Image
+                        src={"/testCheckBox.svg"}
+                        alt=""
+                        height={10}
+                        width={15}
+                      />
                       Testcase
                     </TabsTrigger>
                     <TabsTrigger value="testCaseResult">
-                      <Image src={"/testResult.svg"} alt="" height={10} width={17}/>
-
+                      <Image
+                        src={"/testResult.svg"}
+                        alt=""
+                        height={10}
+                        width={17}
+                      />
                       Test Result
                     </TabsTrigger>
                   </TabsList>
                   <Separator className="bg-gray-400" />
 
-                  <TabsContent value="testCase">testCase</TabsContent>
+                  <TabsContent value="testCase">
+                    {" "}
+                    <Tabs defaultValue="case1">
+                      <TabsList className="space-x-4">
+                        <TabsTrigger value="case1">Case 1</TabsTrigger>
+                        <TabsTrigger value="case2">Case 2</TabsTrigger>
+                      </TabsList>
+                      <TabsContent value="case1">case1</TabsContent>
+                      <TabsContent value="case2">case2</TabsContent>
+                    </Tabs>
+                  </TabsContent>
                   <TabsContent value="testCaseResult">
                     testCaseResult
                   </TabsContent>
